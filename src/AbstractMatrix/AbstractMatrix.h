@@ -6,7 +6,7 @@
 #include <ostream>
 
 class AbstractMatrix {
-protected:
+public: // todo protected
   char *data;
   size_t typeSize;
   size_t size;
@@ -23,10 +23,6 @@ public:
   size_t getSize() const;
 
   void setSize(size_t size);
-
-  virtual std::istream &operator>>(std::istream &is);
-  // todo made it virtual
-  virtual std::ostream &operator<<(std::ostream &os);
 
   virtual ~AbstractMatrix();
 };

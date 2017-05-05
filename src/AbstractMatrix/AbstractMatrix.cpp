@@ -37,8 +37,3 @@ AbstractMatrix::~AbstractMatrix() {
   delete this->data;
 }
 
-//std::istream &AbstractMatrix::operator>>(std::istream &is)
-//{}
-//
-//std::ostream &AbstractMatrix::operator<<(std::ostream &os)
-//{}

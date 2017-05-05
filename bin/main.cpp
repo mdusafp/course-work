@@ -1,9 +1,13 @@
 #include <iostream>
+
 #include "../src/FloatMatrix/FloatMatrix.h"
 
 int main(int argc, const char* argv[]) {
-  FloatMatrix matr(sizeof(float), 5);
+  FloatMatrix matr(sizeof(float), 8);
 
-  AbstractMatrix matrix(sizeof(float), 5);
+//  std::cout << *(float*)(matr.data);
+  std::cin >> matr;
+  std::cout << *(float*)(matr.data);
+
   return 0;
 }

@@ -2,20 +2,21 @@
 #define COURSE_WORK_FLOATMATRIX_H
 
 #include <ostream>
+#include <iostream>
+
 #include "../AbstractMatrix/AbstractMatrix.h"
 
-class FloatMatrix : AbstractMatrix {
+class FloatMatrix : public AbstractMatrix {
 public:
   FloatMatrix();
 
   FloatMatrix(size_t typeSize, size_t size);
 
-  std::istream &operator>>(std::istream &is);
-
-  std::ostream &operator<<(std::ostream &os) const;
-
   ~FloatMatrix();
-};
 
+  friend std::istream &operator>>(std::istream &is, FloatMatrix &matrix);
+
+  friend std::ostream &operator<<(std::ostream &os, const FloatMatrix &matrix);
+};
 
 #endif //COURSE_WORK_FLOATMATRIX_H

@@ -1,6 +1,7 @@
 #include "FloatMatrix.h"
 
 FloatMatrix::FloatMatrix()
+    : AbstractMatrix()
 {}
 
 FloatMatrix::FloatMatrix(size_t typeSize, size_t size)
@@ -10,29 +11,32 @@ FloatMatrix::FloatMatrix(size_t typeSize, size_t size)
 FloatMatrix::~FloatMatrix()
 {}
 
-std::istream &FloatMatrix::operator>>(std::istream &is) {
-  if (!data) {
-    data = new char[size * typeSize];
+std::istream &operator>>(std::istream &is, FloatMatrix &matrix) {
+  if (matrix.data) {
+    delete matrix.data;
   }
 
-  for (int i = 0; i < size * typeSize; ++i) {
-    for (int j = 0; j < size * typeSize; ++j) {
-      is >> data[i * size * typeSize + j];
-    }
+  std::cout << "Enter size of matrix: ";
+  is >> matrix.size;
+  matrix.typeSize = sizeof(float);
+
+  float temp = 0;
+
+  for (int i = 0; i < matrix.size; i += sizeof(float)) {
+    is >> temp;
+    *(float*)(matrix.data) = temp;
   }
 
   return is;
 }
 
-std::ostream &FloatMatrix::operator<<(std::ostream &os) const {
-  os << "data: " << std::endl;
-  for (int i = 0; i < size * typeSize; ++i) {
-    for (int j = 0; j < size * typeSize; ++j) {
-      os << data[i * size * typeSize + j] << " ";
-    }
-    os << std::endl;
+std::ostream &operator<<(std::ostream &os, const FloatMatrix &matrix) {
+  for (int i = 0; i < matrix.size; i += sizeof(float)) {
+    os << (float*)matrix.data[i] << (float*)(matrix.data + i) << " ";
   }
+  os << std::endl;
 
   return os;
 }
+
 

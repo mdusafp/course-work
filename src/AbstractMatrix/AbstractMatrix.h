@@ -4,6 +4,9 @@
 #include <cstdlib>
 #include <istream>
 #include <ostream>
+#include <cstring>
+#include <iostream>
+#include <fstream>
 
 class AbstractMatrix {
 protected:
@@ -29,6 +32,8 @@ public:
 
   friend std::istream &operator>>(std::istream &is, AbstractMatrix &matrix);
   friend std::ostream &operator<<(std::ostream &os, const AbstractMatrix &matrix);
+  friend std::ifstream &operator>>(std::ifstream &ifs, AbstractMatrix &matrix);
+  friend std::ofstream &operator<<(std::ofstream &ofs, const AbstractMatrix &matrix);
 };
 
 

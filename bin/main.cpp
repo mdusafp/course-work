@@ -1,22 +1,54 @@
 #include <iostream>
-#include "../src/AbstractMatrix/AbstractMatrix.h"
 #include "../src/FloatMatrix/FloatMatrix.h"
 
 int main(int argc, const char* argv[]) {
-  AbstractMatrix matrix1;
+  int choose = 0;
+  FloatMatrix a;
 
-  std::cin >> matrix1;
-  std::cout << matrix1;
+  do {
+    std::cin >> choose;
 
-  AbstractMatrix matrix2;
-  std::cin >> matrix2;
-  std::cout << matrix2;
+    std::cout << "Choose something" << std::endl;
+    std::cout << "1. Console input" << std::endl;
+    std::cout << "2. File input" << std::endl;
+    std::cout << "3. Console output" << std::endl;
+    std::cout << "4. File output" << std::endl;
+    std::cout << "5. Sum of matrix" << std::endl;
+    std::cout << "6. Equality operators" << std::endl;
 
-  std::cout << "matrix1 == matrix2?" << std::endl;
-  matrix1 == matrix2 ? std::cout << "Yep" : std::cout << "Nope";
-  FloatMatrix fmatrix;
-  std::cin >> fmatrix;
-  std::cout << fmatrix;
+    switch (choose) {
+      case 1: {
+        std::cin >> a;
+        break;
+      }
+      case 2: {
+//        ...
+        break;
+      }
+      case 3: {
+        std::cout << a;
+        break;
+      }
+      case 4: {
+//        ...
+        break;
+      }
+      case 5: {
+//        ...
+        break;
+      }
+      case 6: {
+//        ...
+        break;
+      }
+      case 0: {
+        exit(EXIT_SUCCESS);
+      }
+      default: {
+        std::cout << "Miss keybord" << std::endl;
+      }
+    }
+  } while(true);
 
   return 0;
 }

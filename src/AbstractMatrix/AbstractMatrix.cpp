@@ -1,5 +1,3 @@
-#include <cstring>
-#include <iostream>
 #include "AbstractMatrix.h"
 
 AbstractMatrix::AbstractMatrix()
@@ -12,7 +10,7 @@ AbstractMatrix::AbstractMatrix(size_t size)
 
 
 AbstractMatrix::AbstractMatrix(const AbstractMatrix &matrix) {
-  data = nullptr; // delete before?
+  delete data;
 
   size = matrix.size;
   data = new char[size];
@@ -21,7 +19,7 @@ AbstractMatrix::AbstractMatrix(const AbstractMatrix &matrix) {
   }
 }
 
-AbstractMatrix::AbstractMatrix(AbstractMatrix &&matrix) {
+AbstractMatrix::AbstractMatrix(AbstractMatrix &&matrix) noexcept {
   data = matrix.data;
   size = matrix.size;
   matrix.data = nullptr;
@@ -108,4 +106,32 @@ std::ostream &operator<<(std::ostream &os, const AbstractMatrix &matrix) {
   }
   os << std::endl;
   return os;
+}
+
+std::ifstream &operator>>(std::ifstream &ifs, AbstractMatrix &matrix) {
+  ifs >> matrix.size;
+
+  if (matrix.data) {
+    delete matrix.data;
+  }
+  matrix.data = new char[matrix.size * matrix.size];
+
+  for (int i = 0; i < matrix.size * matrix.size; ++i) {
+    ifs >> matrix.data[i];
+  }
+  std::cout << std::endl;
+  return ifs;
+}
+
+std::ofstream &operator<<(std::ofstream &ofs, const AbstractMatrix &matrix) {
+  ofs << "Matrix:" << std::endl;
+
+  for (int i = 0; i < matrix.size; ++i) {
+    for (int j = 0; j < matrix.size; ++j) {
+      ofs << matrix.data[i * matrix.size + j] << ' ';
+    }
+    ofs << std::endl;
+  }
+  ofs << std::endl;
+  return ofs;
 }

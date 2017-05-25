@@ -1,76 +1,91 @@
 #include <iostream>
 #include "../src/FloatMatrix/FloatMatrix.h"
+#include "../src/AbstractMatrix/AbstractMatrix.h"
 
 using namespace std;
 
-int main(int argc, const char* argv[]) {
+int main(int argc, const char* argv[])
+{
   int choose = 0;
-  FloatMatrix* firstMatrix = nullptr;
-  FloatMatrix* secondMatrix = nullptr;
-  FloatMatrix* sumMatrix = nullptr;
+  FloatMatrix firstMatrix;
+  FloatMatrix secondMatrix;
+  FloatMatrix sumMatrix;
 
-  do {
+  do
+  {
     cout << "1. Console input (Write 1 by 1)" << endl;
     cout << "2. File input  (input1.txt input2.txt)" << endl;
     cout << "3. Console output" << endl;
     cout << "4. File output" << endl;
     cout << "5. Sum of matrix" << endl;
     cout << "6. Equality operators" << endl;
+    cout << "7. Multiply matrix" << endl;
     cout << "0. Exit" << endl;
     cout << "Choose something" << endl;
 
     cin >> choose;
 
-    switch (choose) {
-      case 1: {
+    switch (choose)
+    {
+      case 1:
+      {
         size_t sizeOfMatrix = 0;
 
         cout << "Enter the size of matrix: ";
         cin >> sizeOfMatrix;
 
-        firstMatrix = new FloatMatrix(sizeOfMatrix, sizeof(float));
-        secondMatrix = new FloatMatrix(sizeOfMatrix, sizeof(float));
+        FloatMatrix a(sizeOfMatrix, sizeof(float));
+
+        firstMatrix = a;
+        secondMatrix = a;
 
         cout << "First matrix: " << endl;
-        cin >> *firstMatrix;
+        cin >> firstMatrix;
         cout << "Second matrix: " << endl;
-        cin >> *secondMatrix;
+        cin >> secondMatrix;
 
         break;
       }
-      case 2: {
+      case 2:
+      {
         size_t sizeOfMatrix = 0;
 
         ifstream fin;
         fin.open("test/input1.txt");
-        if (!fin.fail()) {
+        if (!fin.fail())
+        {
           fin >> sizeOfMatrix;
-          firstMatrix = new FloatMatrix(sizeOfMatrix, sizeof(float));
+          FloatMatrix a(sizeOfMatrix, sizeof(float));
+          firstMatrix = a;
 
-          fin >> *firstMatrix;
+          fin >> firstMatrix;
         }
         fin.close();
 
         fin.open("test/input2.txt");
-        if (!fin.fail()) {
+        if (!fin.fail())
+        {
           fin >> sizeOfMatrix;
-          secondMatrix = new FloatMatrix(sizeOfMatrix, sizeof(float));
+          FloatMatrix a(sizeOfMatrix, sizeof(float));
+          secondMatrix = a;
 
-          fin >> *secondMatrix;
+          fin >> secondMatrix;
         }
 
         fin.close();
         break;
       }
-      case 3: {
+      case 3:
+      {
         cout << "First matrix: " << endl;
-        cout << *firstMatrix << endl;
+        cout << firstMatrix << endl;
 
         cout << "Second matrix: " << endl;
-        cout << *secondMatrix << endl;
+        cout << secondMatrix << endl;
         break;
       }
-      case 4: {
+      case 4:
+      {
         ofstream fout;
         fout.open("test/output1.txt");
         fout << firstMatrix;
@@ -80,11 +95,13 @@ int main(int argc, const char* argv[]) {
         fout.close();
         break;
       }
-      case 5: {
-        *sumMatrix = *firstMatrix + *secondMatrix;
+      case 5:
+      {
+        sumMatrix = (firstMatrix + secondMatrix);
 
         cout << "sum of matrix: " << endl;
         cout << sumMatrix;
+        cout << endl;
 
         ofstream fout;
         fout.open("test/output_sum.txt");
@@ -92,25 +109,33 @@ int main(int argc, const char* argv[]) {
         fout.close();
         break;
       }
-      case 6: {
+      case 6:
+      {
         firstMatrix == secondMatrix
-          ? cout << "first matrix equal second matrix"
-          : cout << "first matrix not equal second matrix";
-        cout << endl;
-
-        firstMatrix != secondMatrix
-          ? cout << "first matrix not equal second matrix"
-          : cout << "first matrix equal second matrix";
+        ? cout << "first matrix equal second matrix"
+        : cout << "first matrix not equal second matrix";
         cout << endl;
 
         break;
       }
-      case 0: {
+      case 7:
+      {
+        FloatMatrix mnMatrix;
+        mnMatrix = firstMatrix*secondMatrix;
+        cout << mnMatrix;
+        cout << endl;
+
+        break;
+      }
+      case 0:
+      {
         exit(EXIT_SUCCESS);
       }
-      default: {
+      default:
+      {
         cout << "Ne popal;(" << endl;
       }
     }
-  } while(true);
+  }
+  while(true);
 }

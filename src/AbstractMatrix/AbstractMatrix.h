@@ -8,24 +8,27 @@
 #include <iostream>
 #include <fstream>
 
-class AbstractMatrix {
-protected:
+class AbstractMatrix
+{
+public:
   char* data;
   size_t size;
   size_t typeSize;
-public:
+
   AbstractMatrix();
   AbstractMatrix(size_t size, size_t typeSize);
   AbstractMatrix(const AbstractMatrix &matrix);
   AbstractMatrix(AbstractMatrix &&matrix) noexcept;
+  virtual ~AbstractMatrix();
 
-  AbstractMatrix& operator=(const AbstractMatrix &matrix);
+  AbstractMatrix& operator=(AbstractMatrix &);
   AbstractMatrix& operator+(AbstractMatrix &ptr);
+  AbstractMatrix& operator*(AbstractMatrix &ptr);
   bool operator==(const AbstractMatrix &matrix) const;
   bool operator!=(const AbstractMatrix &matrix) const;
 
-  virtual ~AbstractMatrix();
-  virtual char* sum(char *a, char *b);
+  virtual void sum(char*, char*, char*) {};
+  virtual void mn(char*, char*, char*) {};
 
   size_t getSize() const;
   void setSize(size_t size);

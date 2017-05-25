@@ -1,72 +1,61 @@
 #include "FloatMatrix.h"
 
 FloatMatrix::FloatMatrix()
+    : AbstractMatrix()
 {}
 
-FloatMatrix::FloatMatrix(size_t typeSize)
-    : typeSize(typeSize)
+FloatMatrix::FloatMatrix(size_t size, size_t typeSize)
+    : AbstractMatrix(size, typeSize)
 {}
 
-size_t FloatMatrix::getTypeSize() const {
-  return typeSize;
-}
-
-void FloatMatrix::setTypeSize(size_t typeSize) {
-  this->typeSize = typeSize;
-}
-
-FloatMatrix &FloatMatrix::operator+(FloatMatrix &right) {
-  // todo сделать матрицы разных размеров
-  char* leftPtr = data;
-  char* rightPtr = right.data;
-
-  for (int i = 0; i < size * size; ++i) {
-    float a = *(float*)(leftPtr);
-    float b = *(float*)(rightPtr);
-
-    float sum = a + b;
-
-    leftPtr += sizeof(float);
-    rightPtr += sizeof(float);
-  }
-
-  return *this;
+char* AbstractMatrix::sum(char *a, char *b)
+{
+  float _a = *(float*)a;
+  float _b = *(float*)b;
+  float* sum = new float(_a + _b);
+  return (char*)sum;
 }
 
 FloatMatrix::FloatMatrix(const FloatMatrix &matrix) {
-  data = nullptr;
+  if (data) {
+    delete data;
+  }
 
-  size = matrix.size;
-  typeSize = matrix.typeSize;
-
+  size = matrix.getSize();
+  typeSize = matrix.getTypeSize();
   data = new char[size * size * typeSize];
+
   for (int i = 0; i < size * size * typeSize; ++i) {
-    data[i] = matrix.data[i];
+    data[i] = matrix.getData()[i];
   }
 }
 
 FloatMatrix::FloatMatrix(FloatMatrix &&matrix) noexcept {
-  data = matrix.data;
-  size = matrix.size;
-  typeSize = matrix.typeSize;
+  data = matrix.getData();
+  size = matrix.getSize();
+  typeSize = matrix.getTypeSize();
 
-  matrix.data = nullptr;
-  matrix.size = 0;
-  matrix.typeSize = 0;
+  matrix.setData(nullptr);
+  matrix.setSize(0);
+  matrix.setTypeSize(0);
 }
 
+std::istream &AbstractMatrix::input(std::istream &is, char *ptr) {
+  is >> *(float*) ptr;
+  return is;
+}
 
-std::ostream &operator<<(std::ostream &os, const FloatMatrix &matrix) {
-  for (int i = 0; i < matrix.getSize() * matrix.getSize(); i += sizeof(float)) {
-    os << *(float*)matrix.getData()[i] << ' ';
-  }
+std::ostream &AbstractMatrix::output(std::ostream &os, const char *ptr) {
+  os << *(float*) ptr << ' ';
   return os;
 }
 
-std::ofstream &operator<<(std::ofstream &ofs, const FloatMatrix &matrix) {
-  for (int i = 0; i < matrix.getSize() * matrix.getSize(); i += sizeof(float)) {
-    ofs << *(float*)matrix.getData()[i] << ' ';
-  }
-  return ofs;
+std::ifstream &AbstractMatrix::finput(std::ifstream &ifs, char *ptr) {
+  ifs >> *(float*) ptr;
+  return ifs;
 }
 
+std::ofstream &AbstractMatrix::foutput(std::ofstream &ofs, const char *ptr) {
+  ofs << *(float*) ptr << ' ';
+  return ofs;
+}

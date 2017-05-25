@@ -8,21 +8,27 @@
 #include "../AbstractMatrix/AbstractMatrix.h"
 
 class FloatMatrix : public AbstractMatrix {
-private:
-  size_t typeSize;
 public:
   FloatMatrix();
-  FloatMatrix(size_t typeSize);
+  FloatMatrix(size_t size, size_t typeSize);
   FloatMatrix(const FloatMatrix& matrix);
   FloatMatrix(FloatMatrix&& matrix) noexcept;
 
-  size_t getTypeSize() const;
+//  friend std::ostream &operator<<(std::ostream &os, const FloatMatrix &matrix);
+//  friend std::ofstream &operator<<(std::ofstream &ofs, const FloatMatrix &matrix);
+//  friend std::istream &operator>>(std::istream &is, FloatMatrix &matrix);
+//  friend std::ifstream &operator>>(std::ifstream &ifs, FloatMatrix &matrix);
 
-  void setTypeSize(size_t typeSize);
-
-  FloatMatrix& operator+(FloatMatrix &right);
-  friend std::ostream &operator<<(std::ostream &os, const FloatMatrix &matrix);
-  friend std::ofstream &operator<<(std::ofstream &ofs, const FloatMatrix &matrix);
+  FloatMatrix& operator=(const FloatMatrix &matrix)
+  {
+    *this = matrix;
+    return *this;
+  }
+  FloatMatrix& operator+(FloatMatrix &ptr)
+  {
+    *this = *this + ptr;
+    return *this;
+  }
 };
 
 #endif //COURSE_WORK_FLOATMATRIX_H

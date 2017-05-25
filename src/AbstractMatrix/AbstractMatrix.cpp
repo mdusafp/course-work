@@ -1,29 +1,42 @@
 #include "AbstractMatrix.h"
 
 AbstractMatrix::AbstractMatrix()
-    : data(nullptr), size(0)
+    : size(0), typeSize(sizeof(char)), data(nullptr)
 {}
 
-AbstractMatrix::AbstractMatrix(size_t size)
-    : data(nullptr), size(size * size)
+AbstractMatrix::AbstractMatrix(size_t size, size_t typeSize)
+    : size(size), typeSize(typeSize), data(new char[size * size * typeSize])
 {}
-
 
 AbstractMatrix::AbstractMatrix(const AbstractMatrix &matrix) {
-  delete data;
+  if (data) {
+    delete data;
+  }
 
-  size = matrix.size;
-  data = new char[size];
-  for (int i = 0; i < size * size; ++i) {
-    data[i] = matrix.data[i];
+  size = matrix.getSize();
+  typeSize = matrix.getTypeSize();
+  data = new char[size * size * typeSize];
+  for (int i = 0; i < size * size * typeSize; ++i) {
+    data[i] = matrix.getData()[i];
   }
 }
 
+size_t AbstractMatrix::getTypeSize() const {
+  return this->typeSize;
+}
+
+void AbstractMatrix::setTypeSize(size_t typeSize) {
+  this->typeSize = typeSize;
+}
+
 AbstractMatrix::AbstractMatrix(AbstractMatrix &&matrix) noexcept {
-  data = matrix.data;
-  size = matrix.size;
-  matrix.data = nullptr;
-  matrix.size = 0;
+  data = matrix.getData();
+  size = matrix.getSize();
+  typeSize = matrix.getTypeSize();
+
+  matrix.setData(nullptr);
+  matrix.setSize(0);
+  matrix.setTypeSize(0);
 }
 
 AbstractMatrix::~AbstractMatrix() {
@@ -31,27 +44,31 @@ AbstractMatrix::~AbstractMatrix() {
 }
 
 AbstractMatrix& AbstractMatrix::operator=(const AbstractMatrix &matrix) {
+  if (this == &matrix) {
+    return *this;
+  }
+
   if (data) {
     delete data;
   }
 
-  size = matrix.size;
-  data = new char[size * size];
+  size = matrix.getSize();
+  data = new char[size * size * typeSize];
 
-  for (int i = 0; i < size * size; ++i) {
-    data[i] = matrix.data[i];
+  for (int i = 0; i < size * size * typeSize; ++i) {
+    data[i] = matrix.getData()[i];
   }
 
   return *this;
 }
 
 bool AbstractMatrix::operator==(const AbstractMatrix &matrix) const {
-  if (size != matrix.size) {
+  if (size != matrix.getSize() || typeSize != matrix.getTypeSize()) {
     return false;
   }
 
-  for (int i = 0; i < size * size; ++i) {
-    if (data[i] != matrix.data[i]) {
+  for (int i = 0; i < size * size * typeSize; ++i) {
+    if (data[i] != matrix.getData()[i]) {
       return false;
     }
   }
@@ -68,7 +85,7 @@ size_t AbstractMatrix::getSize() const {
 }
 
 void AbstractMatrix::setSize(size_t size) {
-  this->size = size * size;
+  this->size = size;
 }
 
 char *AbstractMatrix::getData() const {
@@ -79,59 +96,51 @@ void AbstractMatrix::setData(char *data) {
   this->data = data;
 }
 
+
+AbstractMatrix& AbstractMatrix::operator+(AbstractMatrix &ptr) {
+  char* leftPtr = getData();
+  char* rightPtr = ptr.getData();
+  char* c = nullptr;
+
+  for (int i = 0; i < size * size * typeSize; i += typeSize) {
+    c = nullptr;
+    c = sum(leftPtr, rightPtr);
+    memcpy(data + i, c, strlen(c));
+  }
+
+  return *this;
+}
+
 std::istream &operator>>(std::istream &is, AbstractMatrix &matrix) {
-  std::cout << "Enter size of matrix: ";
-  is >> matrix.size;
-
-  if (matrix.data) {
-    delete matrix.data;
+  for (int i = 0; i < matrix.getSize() * matrix.getSize(); i += matrix.getTypeSize()) {
+    matrix.input(is, matrix.getData() + i);
   }
-  matrix.data = new char[matrix.size * matrix.size];
-
-  std::cout << "Enter the data of matrix:" << std::endl;
-  for (int i = 0; i < matrix.size * matrix.size; ++i) {
-    is >> matrix.data[i];
-  }
-  std::cout << std::endl;
   return is;
 }
 
-std::ostream &operator<<(std::ostream &os, const AbstractMatrix &matrix) {
-  os << "Matrix:" << std::endl;
-  for (int i = 0; i < matrix.size; ++i) {
-    for (int j = 0; j < matrix.size; ++j) {
-      os << matrix.data[i * matrix.size + j] << ' ';
+std::ostream &operator<<(std::ostream &os, AbstractMatrix &matrix) {
+  for (int i = 0; i < matrix.getSize(); ++i) {
+    for (int j = 0; j < matrix.getSize(); ++j) {
+      matrix.output(os, matrix.getData() + i * matrix.getSize() + j);
     }
     os << std::endl;
   }
-  os << std::endl;
   return os;
 }
 
 std::ifstream &operator>>(std::ifstream &ifs, AbstractMatrix &matrix) {
-  ifs >> matrix.size;
-
-  if (matrix.data) {
-    delete matrix.data;
+  for (int i = 0; i < matrix.getSize() * matrix.getSize(); i += matrix.getTypeSize()) {
+    matrix.finput(ifs, matrix.getData() + i);
   }
-  matrix.data = new char[matrix.size * matrix.size];
-
-  for (int i = 0; i < matrix.size * matrix.size; ++i) {
-    ifs >> matrix.data[i];
-  }
-  std::cout << std::endl;
   return ifs;
 }
 
-std::ofstream &operator<<(std::ofstream &ofs, const AbstractMatrix &matrix) {
-  ofs << "Matrix:" << std::endl;
-
-  for (int i = 0; i < matrix.size; ++i) {
-    for (int j = 0; j < matrix.size; ++j) {
-      ofs << matrix.data[i * matrix.size + j] << ' ';
+std::ofstream &operator<<(std::ofstream &ofs, AbstractMatrix &matrix) {
+  for (int i = 0; i < matrix.getSize(); i += matrix.getTypeSize()) {
+    for (int j = 0; j < matrix.getSize(); j += matrix.getTypeSize()) {
+      matrix.output(ofs, matrix.getData() + i * matrix.getSize() + j);
     }
     ofs << std::endl;
   }
-  ofs << std::endl;
   return ofs;
 }

@@ -13,10 +13,10 @@ public:
   FloatMatrix();
   FloatMatrix(size_t size, size_t typeSize);
   FloatMatrix(const FloatMatrix& matrix);
+//  FloatMatrix(FloatMatrix&& matrix) noexcept;
 
   void sum(char *, char *, char *);
   void mn(char*, char*, char*);
-  //FloatMatrix(FloatMatrix&& matrix) noexcept;
 
   using AbstractMatrix::operator=;
   using AbstractMatrix::operator+;

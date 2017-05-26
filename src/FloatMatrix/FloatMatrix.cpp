@@ -33,16 +33,16 @@ FloatMatrix::FloatMatrix(const FloatMatrix &matrix)
     data[i] = matrix.getData()[i];
   }
 }
-/*
-FloatMatrix::FloatMatrix(FloatMatrix &&matrix) noexcept {
-  data = matrix.getData();
-  size = matrix.getSize();
-  typeSize = matrix.getTypeSize();
 
-  matrix.setData(nullptr);
-  matrix.setSize(0);
-  matrix.setTypeSize(0);
-}*/
+//FloatMatrix::FloatMatrix(FloatMatrix &&matrix) noexcept {
+//  data = matrix.getData();
+//  size = matrix.getSize();
+//  typeSize = matrix.getTypeSize();
+//
+//  matrix.setData(nullptr);
+//  matrix.setSize(0);
+//  matrix.setTypeSize(0);
+//}
 
 std::istream &AbstractMatrix::input(std::istream &is, char *ptr)
 {

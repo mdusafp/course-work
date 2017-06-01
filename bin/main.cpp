@@ -7,6 +7,7 @@ using namespace std;
 int main(int argc, const char* argv[])
 {
   int choose = 0;
+  // объявляем матрицы для операций
   FloatMatrix firstMatrix;
   FloatMatrix secondMatrix;
   FloatMatrix sumMatrix;
@@ -33,12 +34,12 @@ int main(int argc, const char* argv[])
 
         cout << "Enter the size of matrix: ";
         cin >> sizeOfMatrix;
-
+        // устанавливаем размер матрицы
         FloatMatrix a(sizeOfMatrix, sizeof(float));
 
         firstMatrix = a;
         secondMatrix = a;
-
+        // считываем две матрицы
         cout << "First matrix: " << endl;
         cin >> firstMatrix;
         cout << "Second matrix: " << endl;
@@ -55,9 +56,11 @@ int main(int argc, const char* argv[])
         if (!fin.fail())
         {
           fin >> sizeOfMatrix;
+          // устанавливаем размер матрицы
           FloatMatrix a(sizeOfMatrix, sizeof(float));
           firstMatrix = a;
 
+          // считываем матрицу
           fin >> firstMatrix;
         }
         fin.close();
@@ -66,9 +69,11 @@ int main(int argc, const char* argv[])
         if (!fin.fail())
         {
           fin >> sizeOfMatrix;
+          // устанавливаем размер марицы
           FloatMatrix a(sizeOfMatrix, sizeof(float));
           secondMatrix = a;
 
+          // считываем матрицу
           fin >> secondMatrix;
         }
 
@@ -77,6 +82,7 @@ int main(int argc, const char* argv[])
       }
       case 3:
       {
+        // выводим матрицы
         cout << "First matrix: " << endl;
         cout << firstMatrix << endl;
 
@@ -86,6 +92,7 @@ int main(int argc, const char* argv[])
       }
       case 4:
       {
+        // выводим матрицы в файл
         ofstream fout;
         fout.open("test/output1.txt");
         fout << firstMatrix;
@@ -97,20 +104,24 @@ int main(int argc, const char* argv[])
       }
       case 5:
       {
+        // складываем матрицы
         sumMatrix = (firstMatrix + secondMatrix);
 
+        // выводим сумму
         cout << "sum of matrix: " << endl;
         cout << sumMatrix;
         cout << endl;
 
         ofstream fout;
         fout.open("test/output_sum.txt");
+        // выводим сумму в файл
         fout << sumMatrix;
         fout.close();
         break;
       }
       case 6:
       {
+        // проверяем на равенство
         firstMatrix == secondMatrix
         ? cout << "first matrix equal second matrix"
         : cout << "first matrix not equal second matrix";
@@ -120,8 +131,10 @@ int main(int argc, const char* argv[])
       }
       case 7:
       {
+        // умножаем матрицы
         FloatMatrix mnMatrix;
         mnMatrix = firstMatrix*secondMatrix;
+        // выводим умноженную матрицу
         cout << mnMatrix;
         cout << endl;
 
